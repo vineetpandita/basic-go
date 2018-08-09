@@ -1,0 +1,42 @@
+package main
+
+import (
+	"sync"
+	"fmt"
+)
+
+func main() {
+
+	 c := make(chan int)
+
+	 var wg sync.WaitGroup
+
+	 wg.Add(2)
+
+	 go func() {
+	 	 for i:=10;i<20 ;i++  {
+			 c <-i
+		 }
+		 wg.Done()
+	 }()
+
+
+	go func() {
+		for i:=30;i<40 ;i++  {
+			c <-i
+		}
+		wg.Done()
+	}()
+
+
+	 go func() {
+	 	wg.Wait()
+	 	close(c)
+	 }()
+
+	 for n:= range c {
+	 	fmt.Println(n)
+	 }
+
+
+	 }
